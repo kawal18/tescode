@@ -1,14 +1,22 @@
-FROM oraclelinux:7-slim
-FROM node:10.16.3
-RUN npm config set registry https://lpnexus01.bmwgroup.net:8088/repository/bmw_npm_repositories/
-RUN npm config rm proxy
-RUN npm config rm https-proxy
-RUN npm install oracledb
-RUN mkdir -p /opt/oracle
-WORKDIR /opt/oracle
-ADD /home/lab-user/instantclient_19_11 /opt/oracle
-RUN export LD_LIBRARY_PATH=/opt/oracle/instantclient_19_11
-RUN export LD_LIBRARY_PATH=/opt/oracle/instantclient_19_11
-RUN export ORACLE_HOME=/opt/oracle/instantclient_19_11
-RUN cd /opt/oracle
+FROM node:12-buster-slim
+
+# Installing Oracle instant client
+WORKDIR    /opt/oracle
+RUN         wget https://download.oracle.com/otn_software/linux/instantclient/instantclient-basiclite-linuxx64.zip \
+            && unzip instantclient-basiclite-linuxx64.zip \
+            && rm -f instantclient-basiclite-linuxx64.zip \
+            && cd /opt/oracle/instantclient* \
+            && rm -f *jdbc* *occi* *mysql* *README *jar uidrvci genezi adrci \
+            && echo /opt/oracle/instantclient* > /etc/ld.so.conf.d/oracle-instantclient.conf \
+            && ldconfig
+RUN export LD_LIBRARY_PATH=/opt/oracle/instantclient_19_5
+RUN export LD_LIBRARY_PATH=/opt/oracle/instantclient_19_5
+RUN export ORACLE_HOME=/opt/oracle/instantclient_19_5
+
+WORKDIR    /usr/src/app
+COPY       . .  # Copy my project folder content into /app container directory
+
+EXPOSE     8000
+RUN npm install
+CMD ["node", "index.js"]
 
