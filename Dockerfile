@@ -1,5 +1,5 @@
 FROM node:12-buster-slim
-RUN npm config set proxy http://proxy.muc:8080
+
 # Installing Oracle instant client
 WORKDIR    /opt/oracle
 RUN        yum install -y libaio1 wget unzip \
