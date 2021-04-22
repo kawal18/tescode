@@ -6,7 +6,7 @@ RUN npm config rm https-proxy
 RUN npm install oracledb
 RUN mkdir -p /opt/oracle
 WORKDIR /opt/oracle
-ADD instantclient_19_11 /opt/oracle
+ADD /home/lab-user/instantclient_19_11 /opt/oracle
 RUN export LD_LIBRARY_PATH=/opt/oracle/instantclient_19_11
 RUN export LD_LIBRARY_PATH=/opt/oracle/instantclient_19_11
 RUN export ORACLE_HOME=/opt/oracle/instantclient_19_11
